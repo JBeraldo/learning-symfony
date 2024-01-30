@@ -26,8 +26,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 {
     public function __construct(
         ManagerRegistry $registry,
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private LoggerInterface $logger
     )
     {
         parent::__construct($registry, User::class);
@@ -47,15 +45,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function store(Request $request): void
+    public function store(User $user): void
     {
-        $data = $request->toArray();
-        $user = new User();
 
-        $hashedPassword =  $this->passwordHasher->hashPassword($user,$data['password']);
-
-        $user->setUsername($data['username']);
-        $user->setPassword($hashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
