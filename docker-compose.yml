@@ -28,21 +28,21 @@ services:
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
             - api-network
-    # mysql:
-    #     image: mariadb
-    #     container_name: mysql
-    #     user: mysql
-    #     environment:
-    #         MYSQL_DATABASE: ${DB_DATABASE}
-    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    #         MYSQL_PASSWORD: ${DB_PASSWORD}
-    #         MYSQL_USER: ${DB_USERNAME}
-    #     volumes:
-    #         - ./docker/database/mariadb:/var/lib/mysql:rw
-    #     ports:
-    #         - "3306:3306"
-    #     networks:
-    #         - api-network
+    mysql:
+         image: mariadb
+         container_name: mysql
+         user: mysql
+         environment:
+             MYSQL_DATABASE: ${DB_DATABASE}
+             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+             MYSQL_PASSWORD: ${DB_PASSWORD}
+             MYSQL_USER: ${DB_USERNAME}
+         volumes:
+             - ./docker/database/mariadb:/var/lib/mysql:rw
+         ports:
+             - "3306:3306"
+         networks:
+             - api-network
 
 networks:
     api-network:
