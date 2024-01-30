@@ -22,4 +22,12 @@ class UserController extends AbstractController
             "user" => $this->userRepository->store($request)
         ]);
     }
+    #[Route('', name: 'show_', methods: ['get'])]
+    public function show(Request $request): JsonResponse
+    {
+
+        return $this->json([
+            "users" => $this->userRepository->get()
+        ]);
+    }
 }

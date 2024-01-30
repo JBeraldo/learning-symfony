@@ -7,7 +7,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,7 +26,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 {
     public function __construct(
         ManagerRegistry $registry,
-        private readonly LoggerInterface $logger,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private LoggerInterface $logger
     )
     {
         parent::__construct($registry, User::class);
@@ -47,13 +47,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         $data = $request->toArray();
         $user = new User();
+
+        $hashedPassword =  $this->passwordHasher->hashPassword($user,$data['password']);
+
         $user->setUsername($data['username']);
-        $user->setPassword($data['password']);
+        $user->setPassword($hashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+    public function get()
+    {
+        $users = $this->findAll();
+        return $users;
     }
 }
