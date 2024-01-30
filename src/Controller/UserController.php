@@ -15,7 +15,7 @@ class UserController extends AbstractController
     )
     {}
 
-    #[Route('/', name: 'create_', methods: ['POST'])]
+    #[Route('', name: 'create_', methods: ['POST'])]
     public function store(Request $request): JsonResponse
     {
         return $this->json([
