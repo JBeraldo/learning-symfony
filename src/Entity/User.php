@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Table(name: 'users')]
@@ -21,11 +22,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column]
+    #[Ignore]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
+    #[Ignore]
     #[ORM\Column]
     private ?string $password = null;
 
@@ -51,6 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    #[Ignore]
     public function getUserIdentifier(): string
     {
         return (string) $this->username;

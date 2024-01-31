@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\User\UserDTO;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,13 @@ class UserService
 
 
 
-    public function store(Request $request)
+    public function store(UserDTO $userDTO)
     {
-        $data = $request->toArray();
         $user = new User();
 
-        $hashedPassword =  $this->passwordHasher->hashPassword($user,$data['password']);
+        $hashedPassword =  $this->passwordHasher->hashPassword($user,$userDTO->password);
 
-        $user->setUsername($data['username']);
+        $user->setUsername($userDTO->username);
         $user->setPassword($hashedPassword);
 
         $this->userRepository->store($user);

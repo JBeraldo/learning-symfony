@@ -2,11 +2,13 @@
 // src/Controller/UserController.php
 namespace App\Controller;
 
+use App\DTO\User\UserDTO;
 use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/user', name: 'user_')]
@@ -18,9 +20,9 @@ class UserController extends AbstractController
     {}
 
     #[Route('', name: 'create_', methods: ['POST'])]
-    public function store(Request $request): Response
+    public function store( #[MapRequestPayload] UserDTO $userDTO): Response
     {
-        $this->service->store($request);
+        $this->service->store($userDTO);
         return new Response('',201);
     }
     #[Route('', name: 'show_', methods: ['get'])]
