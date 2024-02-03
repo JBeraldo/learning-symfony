@@ -5,20 +5,19 @@ namespace App\Services;
 use App\DTO\User\UserDTO;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserService
+readonly class UserService
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserRepository              $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
     )
     {}
 
 
 
-    public function store(UserDTO $userDTO)
+    public function store(UserDTO $userDTO):void
     {
         $user = new User();
 
@@ -30,7 +29,9 @@ class UserService
         $this->userRepository->store($user);
     }
 
-
+    /**
+     * @return User[]
+     */
     public function get()
     {
         return $this->userRepository->findAll();
